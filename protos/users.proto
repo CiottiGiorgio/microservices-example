@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+import "types.proto";
+
+service Users {
+  rpc AddUser (User) returns (UserId) {}
+  rpc GetUser (UserId) returns (User) {}
+}

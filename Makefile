@@ -1,10 +1,20 @@
 # Allow to run multiple lines in a recipe in the same shell.
 .ONESHELL:
 
-SRCDIR=microservices_example/
-TESTDIR=tests/
+SRCDIR=microservices_example
+TESTDIR=tests
 
-TARGETDIRS=$(SRCDIR) $(TESTDIR)
+TARGETDIRS=$(SRCDIR)/ $(TESTDIR)/
+
+PROTOC=poetry run python -m grpc_tools.protoc
+
+types-protobuf:
+	$(PROTOC) --proto_path=./protos --python_out=$(SRCDIR) --pyi_out=$(SRCDIR) protos/types.proto
+
+users-protobuf: types-protobuf
+	$(PROTOC) --proto_path=./protos --python_out=$(SRCDIR)/users/ --pyi_out=$(SRCDIR)/users/ --grpc_python_out=$(SRCDIR)/users/ protos/users.proto
+
+compile-protobuf: users-protobuf
 
 autoflake:
 	poetry run autoflake -r --in-place --remove-unused-variables --remove-all-unused-imports $(TARGETDIRS)
@@ -26,7 +36,7 @@ consistent-format: autoflake black isort
 
 correct-format: consistent-format mypy pylint
 
-tests:
+tests: compile-protobuf
 	poetry run pytest -x --cov=$(SRCDIR) $(TESTDIR)
 
 coverage-report:
