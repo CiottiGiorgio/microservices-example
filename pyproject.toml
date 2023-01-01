@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "microservices-example"
+version = "0.1.0"
+description = "Exercise in implementing a hybrid between a monolith and microservices design."
+authors = ["Giorgio Ciotti <gciotti.dev@gmail.com>"]
+readme = "README.md"
+packages = [{include = "microservices_example"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.12.0"
+isort = "^5.11.4"
+pylint = "^2.15.9"
+mypy = "^0.991"
+pytest = "^7.2.0"
+pytest-cov = "^4.0.0"
+autoflake = "^2.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
